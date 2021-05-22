@@ -1,0 +1,31 @@
+{
+  "name": "gimpfu-iexec-ui",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open --https",
+    "build": "parcel build index.html",
+    "predeploy": "rm -rf dist && parcel build index.html --no-minify --no-source-maps --public-url /gimpfu-iexec-ui",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "iexec": "5.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.14.3",
+    "bootstrap": "5.0.1",
+    "eslint": "7.27.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-plugin-import": "2.23.3",
+    "gh-pages": "^1.2.0",
+    "parcel-bundler": "^1.10.3",
+    "prettier": "2.3.0",
+    "prettier-eslint": "12.0.0"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ],
+  "keywords": []
+}
