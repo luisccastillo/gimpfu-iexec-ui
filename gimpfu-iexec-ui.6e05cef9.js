@@ -101649,6 +101649,10 @@ const appsShowInput = document.getElementById("apps-address-input");
 const appsShowButton = document.getElementById("apps-show-button");
 const appsShowError = document.getElementById("apps-show-error");
 const appsShowOutput = document.getElementById("apps-details-output");
+const appOrderbookShowInput = document.getElementById("app-orderbook-address-input");
+const appOrderbookShowButton = document.getElementById("app-orderbook-show-button");
+const appOrderbookShowError = document.getElementById("app-orderbook-show-error");
+const appOrderbookShowOutput = document.getElementById("app-orderbook-details-output");
 const buyBuyButton = document.getElementById("buy-buy-button");
 const buyBuyError = document.getElementById("buy-buy-error");
 const buyBuyOutput = document.getElementById("buy-dealid-output");
@@ -101748,6 +101752,23 @@ const showApp = iexec => async () => {
     appsShowError.innerText = error;
   } finally {
     appsShowButton.disabled = false;
+  }
+};
+
+const showOrderbook = iexec => async () => {
+  try {
+    appOrderbookShowButton.disabled = true;
+    appOrderbookShowError.innerText = "";
+    appOrderbookShowOutput.innerText = "";
+    const appAddress = appOrderbookShowInput.value;
+    const {
+      appOrders
+    } = await iexec.orderbook.fetchAppOrderbook(appAddress);
+    appOrderbookShowOutput.innerText = JSON.stringify(appOrders, null, 2);
+  } catch (error) {
+    appOrderbookShowError.innerText = error;
+  } finally {
+    appOrderbookShowButton.disabled = false;
   }
 };
 
@@ -101898,10 +101919,10 @@ const init = async () => {
       reject(Error(`Failed to get network version from provider: ${err}`));
     }));
     const networkVersion = result;
-    console.log(result);
 
-    if (networkmap.get(parseInt(networkVersion) === undefined)) {
+    if (networkmap.get(parseInt(networkVersion)) == undefined) {
       const error = `Unsupported network ${networkVersion}, please switch to Goerli or Bellecour`;
+      storageInitButton.innerText = "invalid network";
       networkOutput.innerText = error;
       throw Error(error);
     }
@@ -101915,12 +101936,14 @@ const init = async () => {
     await checkStorage(iexec)();
     storageInitButton.addEventListener("click", initStorage(iexec));
     appsShowButton.addEventListener("click", showApp(iexec));
+    appOrderbookShowButton.addEventListener("click", showOrderbook(iexec));
     buyBuyButton.addEventListener("click", buyComputation(iexec));
     resultsShowDealButton.addEventListener("click", showDeal(iexec));
     resultsShowTaskButton.addEventListener("click", showTask(iexec));
     resultsDownloadButton.addEventListener("click", dowloadResults(iexec));
     storageInitButton.disabled = false;
     appsShowButton.disabled = false;
+    appOrderbookShowButton.disabled = false;
     buyBuyButton.disabled = false;
     resultsShowDealButton.disabled = false;
     resultsShowTaskButton.disabled = false;
